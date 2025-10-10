@@ -1,7 +1,10 @@
+import NavBarComponent from "@/components/NavBar";
+
 export default function Home() {
   return (
     <>
-      <h1>GoodBudget</h1>
+      <NavBarComponent />
+      <h1>Dashboard</h1>
     </>
   );
 }
