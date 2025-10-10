@@ -2,7 +2,8 @@ type transactionsData = {
     _id: number,
     party: string,
     amount: number,
-    category: string,
+    c_name: string,
+    c_type: string
     date: string,
     mode: string,
     desc: string,

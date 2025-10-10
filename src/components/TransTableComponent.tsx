@@ -8,8 +8,8 @@ export default function TransTableComponent(
         return (
             <tr key={key}>
                 <td>{trans.party}</td>
-                <td>{trans.amount}</td>
-                <td>{trans.category}</td>
+                <td style={{ color: trans.c_type == "income" ? "green" : "red", fontWeight: "bold" }}>{trans.amount}</td>
+                <td>{trans.c_name}</td>
                 <td>{trans.date}</td>
                 <td>{trans.mode}</td>
                 <td>{trans.desc}</td>
