@@ -1,7 +1,7 @@
 "use client";
 
 import NavBarComponent from "@/components/NavBar";
-import TransTableComponent from "@/components/TransTableComponent";
+import TransTableComponent from "@/components/tables/TransTableComponent";
 import transactionsData from "@/typeDefiniton/transactionsData";
 import { useEffect, useState } from "react";
 
@@ -39,9 +39,7 @@ export default function Home() {
   return (
     <>
       <NavBarComponent />
-      <div
-        className="main-container d-flex justify-content-center"
-      >
+      <div className="main-container d-flex justify-content-center">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-12 col-md-10 col-lg-8">
