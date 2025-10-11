@@ -97,7 +97,7 @@ function fillLastWeek(data: dateBal[]): dateBal[] {
   startDate.setDate(today.getDate() - 6);
 
   const result: dateBal[] = [];
-  let currentDate = new Date(startDate);
+  const currentDate = new Date(startDate);
 
   // Start with the *first known* balance in the data
   let lastBal = sorted.length > 0 ? sorted[0].bal : 0;
