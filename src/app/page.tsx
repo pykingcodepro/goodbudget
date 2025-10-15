@@ -1,12 +1,16 @@
 "use client";
 
+import connectDB from "@/client";
 import NavBarComponent from "@/components/NavBar";
 import TransTableComponent from "@/components/tables/TransTableComponent";
 import transactionsData from "@/typeDefiniton/transactionsData";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-
+  connectDB(
+    process.env.MONGODB_URI as string,
+    process.env.MONGODB_NAME as string
+  );
   const [transList, setTransList] = useState<transactionsData[]|null>(null);
 
   useEffect(() => {
