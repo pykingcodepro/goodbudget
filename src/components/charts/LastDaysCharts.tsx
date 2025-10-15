@@ -100,7 +100,7 @@ function fillMissingDays(data: dateBal[], noOfDays: number): dateBal[] {
   startDate.setDate(startDate.getDate() - (noOfDays - 1));
 
   const result: dateBal[] = [];
-  let currentDate = new Date(startDate);
+  const currentDate = new Date(startDate);
 
   // --- 4. Find the Initial Balance ---
   // Find the last known balance *before* our start date.
