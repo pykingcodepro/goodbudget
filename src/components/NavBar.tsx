@@ -1,3 +1,5 @@
+"use client";
+
 import { deleteCookies } from "@/lib/deleteCookies";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
