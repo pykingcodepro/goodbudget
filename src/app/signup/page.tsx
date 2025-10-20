@@ -91,7 +91,7 @@ export default function Page() {
                 onChange={(e) => {
                   const newBalance = parseInt(e.target.value);
                   if (newBalance < 0) {
-                    setMsg("Balance can't be negative");
+                    setMsg("Balance can not be negative");
                     setBalance(0);
                     return;
                   }
