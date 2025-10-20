@@ -34,6 +34,6 @@ export const POST = async(req: NextRequest) => {
     }
 }
 
-async function checkPassword(givenPass: string, dbPass: any) {
+async function checkPassword(givenPass: string, dbPass: string) {
     return await bcrypt.compare(givenPass, dbPass);
 }
