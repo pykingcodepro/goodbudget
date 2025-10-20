@@ -1,6 +1,16 @@
+import { deleteCookies } from "@/lib/deleteCookies";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function NavBarComponent() {
+
+    const router = useRouter();
+
+    const handleLogout = async() => {
+        await deleteCookies("token");
+        router.push("/login");
+    }
+
     return (
         <nav className="navbar navbar-expand-lg bg-body-primary mb-5">
             <div className="container-fluid">
@@ -23,6 +33,7 @@ export default function NavBarComponent() {
                             <Link className="nav-link" href="/settings">Settings</Link>
                         </li>
                     </ul>
+                    <button className="nav-link me-5" onClick={handleLogout}>Logout</button>
                 </div>
             </div>
         </nav>

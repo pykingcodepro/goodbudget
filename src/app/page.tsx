@@ -3,17 +3,32 @@
 import connectDB from "@/client";
 import NavBarComponent from "@/components/NavBar";
 import TransTableComponent from "@/components/tables/TransTableComponent";
+import { getCookies } from "@/lib/getCookies";
 import transactionsData from "@/typeDefiniton/transactionsData";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  connectDB(
-    process.env.MONGODB_URI as string,
-    process.env.MONGODB_NAME as string
-  );
   const [transList, setTransList] = useState<transactionsData[]|null>(null);
+  const [uId, setUId] = useState<string|null>(null);
 
   useEffect(() => {
+
+    fetch("api/me", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include"
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(data => {
+      setUId(data.u_id);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+
     setTransList([
       {
         _id: 1,
@@ -39,6 +54,10 @@ export default function Home() {
       }
     ]);
   }, []);
+
+  useEffect(() => {
+    console.log(uId);
+  }, [uId]);
 
   return (
     <>
