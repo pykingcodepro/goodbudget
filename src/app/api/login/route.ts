@@ -16,6 +16,8 @@ export const POST = async(req: NextRequest) => {
 
         // Check if email exists in db
         const user = await User.findOne({ u_email: email });
+        console.log("User: ");
+        console.log(user);
         if(!user) return NextResponse.json({ msg: "User doesn't exist." }, { status: 404 });
 
         // return await checkPassword(password, user.u_pass)
