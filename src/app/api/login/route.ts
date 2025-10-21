@@ -10,15 +10,15 @@ const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export const POST = async(req: NextRequest) => {
     try {
-        connectDB(MONGODB_URI, MONGODB_NAME);
+        // ensure DB connection is awaited so connection errors propagate
+        await connectDB(MONGODB_URI, MONGODB_NAME);
         const { email, password } = await req.json() as { email: string, password: string };
         console.log({ email: email, password: password });
 
         // Check if email exists in db
-        const user = await User.find({ u_email: "sejpalvatsal456@gmail.com" });
-        // console.log("User: ");
-        // console.log(user);
-        // if(!user) return NextResponse.json({ msg: "User doesn't exist." }, { status: 404 });
+        const user = await User.findOne({ u_email: email });
+        // console.log("User: ", user);
+        if(!user) return NextResponse.json({ msg: "User doesn't exist." }, { status: 404 });
 
         // return await checkPassword(password, user.u_pass)
         // ? NextResponse.json({ msg: "Login Successfully" }, { status: 200 })
@@ -31,10 +31,13 @@ export const POST = async(req: NextRequest) => {
         //     return NextResponse.json({ msg: "Incorrect credentials" }, { status: 403 });
         // }
 
-        return NextResponse.json({ msg: "Running.....", data: { email: email, password: password } }, { status: 200 });
+        return NextResponse.json({ msg: "Running.....", data: user }, { status: 200 });
 
-    } catch (error) {
-        return NextResponse.json({ error: error }, { status: 500 });
+    } catch (error: any) {
+        // Ensure the error is serializable. In production avoid leaking stack traces.
+        const body: any = { message: error?.message || String(error) };
+        if (process.env.NODE_ENV !== 'production') body.stack = error?.stack;
+        return NextResponse.json({ error: body }, { status: 500 });
     }
 }
 
