@@ -33,11 +33,9 @@ export const POST = async(req: NextRequest) => {
 
         return NextResponse.json({ msg: "Running.....", data: user }, { status: 200 });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         // Ensure the error is serializable. In production avoid leaking stack traces.
-        const body: any = { message: error?.message || String(error) };
-        if (process.env.NODE_ENV !== 'production') body.stack = error?.stack;
-        return NextResponse.json({ error: body }, { status: 500 });
+        return NextResponse.json({ error: error }, { status: 500 });
     }
 }
 
