@@ -15,7 +15,7 @@ export const POST = async(req: NextRequest) => {
         console.log({ email: email, password: password });
 
         // Check if email exists in db
-        // const user = await User.find({ u_email: "sejpalvatsal456@gmail.com" });
+        const user = await User.find({ u_email: "sejpalvatsal456@gmail.com" });
         // console.log("User: ");
         // console.log(user);
         // if(!user) return NextResponse.json({ msg: "User doesn't exist." }, { status: 404 });
