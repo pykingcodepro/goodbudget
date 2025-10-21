@@ -30,10 +30,10 @@ export const POST = async(req: NextRequest) => {
         }
 
     } catch (error) {
-        return NextResponse.json({ msg: error }, { status: 500 });
+        return NextResponse.json({ error: error }, { status: 500 });
     }
 }
 
-async function checkPassword(givenPass: string, dbPass: any) {
+async function checkPassword(givenPass: string, dbPass: string) {
     return await bcrypt.compare(givenPass, dbPass);
 }
