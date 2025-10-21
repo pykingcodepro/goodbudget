@@ -3,7 +3,6 @@
 import connectDB from "@/client";
 import NavBarComponent from "@/components/NavBar";
 import TransTableComponent from "@/components/tables/TransTableComponent";
-import { getCookies } from "@/lib/getCookies";
 import transactionsData from "@/typeDefiniton/transactionsData";
 import { useEffect, useState } from "react";
 
