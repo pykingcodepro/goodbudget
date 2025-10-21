@@ -13,7 +13,7 @@ export const GET = async(
     try {
         
         await connectDB(MONGODB_URI, MONGODB_NAME);
-        const { u_id } = await params;
+        const { u_id } = params;
         const transactions = await Transaction.find({ u_id: u_id });
         return NextResponse.json({ transactions: transactions }, { status: 200 });
     } catch (error) {
