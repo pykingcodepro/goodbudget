@@ -15,10 +15,10 @@ export const POST = async(req: NextRequest) => {
         console.log({ email: email, password: password });
 
         // Check if email exists in db
-        const user = await User.find({ u_email: "sejpalvatsal456@gmail.com" });
-        console.log("User: ");
-        console.log(user);
-        if(!user) return NextResponse.json({ msg: "User doesn't exist." }, { status: 404 });
+        // const user = await User.find({ u_email: "sejpalvatsal456@gmail.com" });
+        // console.log("User: ");
+        // console.log(user);
+        // if(!user) return NextResponse.json({ msg: "User doesn't exist." }, { status: 404 });
 
         // return await checkPassword(password, user.u_pass)
         // ? NextResponse.json({ msg: "Login Successfully" }, { status: 200 })
@@ -31,7 +31,7 @@ export const POST = async(req: NextRequest) => {
         //     return NextResponse.json({ msg: "Incorrect credentials" }, { status: 403 });
         // }
 
-        return NextResponse.json({ msg: "Running.....", data: user }, { status: 200 });
+        return NextResponse.json({ msg: "Running.....", data: { email: email, password: password } }, { status: 200 });
 
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
