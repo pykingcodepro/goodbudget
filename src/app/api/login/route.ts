@@ -15,7 +15,7 @@ export const POST = async(req: NextRequest) => {
         console.log({ email: email, password: password });
 
         // Check if email exists in db
-        const user = await User.findOne({ u_email: email });
+        const user = await User.find({ u_email: "sejpalvatsal456@gmail.com" });
         console.log("User: ");
         console.log(user);
         if(!user) return NextResponse.json({ msg: "User doesn't exist." }, { status: 404 });
@@ -24,12 +24,14 @@ export const POST = async(req: NextRequest) => {
         // ? NextResponse.json({ msg: "Login Successfully" }, { status: 200 })
         // : NextResponse.json({ msg: "Incorrect Password" }, { status: 403 });
 
-        if(await checkPassword(password, user.u_pass)){ 
-            const token = await jwt.sign({ u_id: user._id }, JWT_SECRET);
-            return NextResponse.json({ token: token }, { status: 200 });
-        } else {
-            return NextResponse.json({ msg: "Incorrect credentials" }, { status: 403 });
-        }
+        // if(await checkPassword(password, user.u_pass)){ 
+        //     const token = await jwt.sign({ u_id: user._id }, JWT_SECRET);
+        //     return NextResponse.json({ token: token }, { status: 200 });
+        // } else {
+        //     return NextResponse.json({ msg: "Incorrect credentials" }, { status: 403 });
+        // }
+
+        return NextResponse.json({ msg: "Running.....", data: user }, { status: 200 });
 
     } catch (error) {
         return NextResponse.json({ error: error }, { status: 500 });
