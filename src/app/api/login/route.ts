@@ -24,14 +24,12 @@ export const POST = async(req: NextRequest) => {
         // ? NextResponse.json({ msg: "Login Successfully" }, { status: 200 })
         // : NextResponse.json({ msg: "Incorrect Password" }, { status: 403 });
 
-        // if(await checkPassword(password, user.u_pass)){ 
-        //     const token = await jwt.sign({ u_id: user._id }, JWT_SECRET);
-        //     return NextResponse.json({ token: token }, { status: 200 });
-        // } else {
-        //     return NextResponse.json({ msg: "Incorrect credentials" }, { status: 403 });
-        // }
-
-        return NextResponse.json({ msg: "Running.....", data: user }, { status: 200 });
+        if(await checkPassword(password, user.u_pass)){ 
+            const token = await jwt.sign({ u_id: user._id }, JWT_SECRET);
+            return NextResponse.json({ token: token }, { status: 200 });
+        } else {
+            return NextResponse.json({ msg: "Incorrect credentials" }, { status: 403 });
+        }
 
     } catch (error: unknown) {
         // Ensure the error is serializable. In production avoid leaking stack traces.
