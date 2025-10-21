@@ -10,7 +10,7 @@ const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export const POST = async (req: NextRequest) => {
   try {
-    connectDB(MONGODB_URI, MONGODB_NAME);
+    await connectDB(MONGODB_URI, MONGODB_NAME);
     const { name, email, password, bal } = (await req.json()) as {
       name: string,
       email: string,

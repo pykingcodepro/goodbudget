@@ -31,12 +31,12 @@ export default function TransTableComponent(
                     </tr>
                 </thead>
                 {
-                    transactionsList 
+                    (transactionsList && transactionsList.length > 0)
                     ? <tbody>{transListElement}</tbody>
                     : null
                 }
             </table>
-            { transactionsList ? null : <b className="text-danger">No Data</b> }
+            { (transactionsList && transactionsList.length > 0) ? null : <b className="text-danger">No Data</b> }
         </>
     );
 }

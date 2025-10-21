@@ -27,36 +27,17 @@ export default function Home() {
     .catch(err => {
       console.log(err);
     });
-
-
-    setTransList([
-      {
-        _id: 1,
-        party: "XYZ",
-        amount: 100,
-        c_name: "College Fees",
-        c_type: "expense",
-        date: "2025-10-09",
-        mode: "Cash",
-        desc: "Desc 1",
-        newBal: 200
-      },
-      {
-        _id: 1,
-        party: "ABC",
-        amount: 200,
-        c_name: "Salary",
-        c_type: "income",
-        date: "2025-10-08",
-        mode: "Cash",
-        desc: "Desc 2",
-        newBal: 300
-      }
-    ]);
   }, []);
 
   useEffect(() => {
-    console.log(uId);
+    // console.log(uId);
+    if(uId != null) {
+      fetch(`api/transactions/${uId}`)
+      .then(res => res.json())
+      .then(data => {
+        setTransList(data.transactions)
+      })
+    }
   }, [uId]);
 
   return (
