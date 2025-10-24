@@ -2,7 +2,7 @@
 import categoryData from "@/typeDefiniton/categoryData";
 import React, { useEffect, useState } from "react";
 
-export default function page() {
+export default function AddTransaction() {
   const [uId, setUId] = useState<string | null>(null);
   const [catList, setCatList] = useState<categoryData[]|null>(null);
 
