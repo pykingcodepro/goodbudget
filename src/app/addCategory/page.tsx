@@ -7,19 +7,19 @@ export default function AddCategory() {
   const router = useRouter();
   const [cName, setCName] = useState<string>("");
   const [cType, setCType] = useState<string>("expense");
-  const [userId, setUserId] = useState<number | null>(null);
+  const [uId, setUId] = useState<string | null>(null);
   const [msg, setMsg] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleClick = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log({ u_id: userId, c_name: cName, c_type: cType });
-    const res = await fetch("../api/category", {
+    console.log({ u_id: uId, c_name: cName, c_type: cType });
+    const res = await fetch(`../api/categories/${uId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ u_id: userId, c_name: cName, c_type: cType }),
+      body: JSON.stringify({ c_name: cName, c_type: cType }),
     });
 
     const data = await res.json();
@@ -34,10 +34,20 @@ export default function AddCategory() {
   };
 
   useEffect(() => {
-    fetch("../api/me", { credentials: "include" })
-      .then((res) => res.json())
-      .then((data) => setUserId(data.user._id))
-      .catch((err) => console.log(err));
+    fetch("api/me", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setUId(data.u_id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
@@ -77,7 +87,7 @@ export default function AddCategory() {
             <button
               type="submit"
               className={"btn btn-primary " + (isLoading ? "disabled" : "")}
-              //   onClick={handleClick}
+              onClick={handleClick}
             >
               Add
             </button>

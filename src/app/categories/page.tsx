@@ -2,31 +2,45 @@
 
 import NavBarComponent from "@/components/NavBar";
 import CategoryTableComponent from "@/components/tables/CategoryTableComponent";
-import TransTableComponent from "@/components/tables/TransTableComponent";
 import categoryData from "@/typeDefiniton/categoryData";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const [categoryList, setCategoryList] = useState<categoryData[] | null>(null);
+  const [uId, setUId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    setCategoryList([
-      {
-        _id: 1,
-        c_name: "College Fees",
-        c_type: "expense",
-        c_date: "2025-07-21",
-      },
-      {
-        _id: 2,
-        c_name: "Salary",
-        c_type: "income",
-        c_date: "2025-08-01",
-      },
-    ]);
+    fetch("api/me", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setUId(data.u_id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
+
+  useEffect(() => {
+    if (uId) {
+      fetch(`api/categories/${uId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setCategoryList(data.categories);
+        });
+    }
+  }, [uId]);
 
   return (
     <>
