@@ -11,7 +11,6 @@ export const GET = async(
 ) => {
 
     try {
-        
         await connectDB(MONGODB_URI, MONGODB_NAME);
         const { u_id } = await params;
         const categories = await Category.find({ u_id: u_id });
