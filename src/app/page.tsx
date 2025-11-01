@@ -1,6 +1,5 @@
 "use client";
 
-import connectDB from "@/client";
 import NavBarComponent from "@/components/NavBar";
 import TransTableComponent from "@/components/tables/TransTableComponent";
 import transactionsData from "@/typeDefiniton/transactionsData";
@@ -35,10 +34,27 @@ export default function Home() {
       fetch(`api/transactions/${uId}`)
         .then((res) => res.json())
         .then((data) => {
-          setTransList(data.transactions);
+          console.log(data.transactions)
+          setTransList(data.transactions.map((trans: any) => {
+            return {
+              _id: trans._id,
+              party: trans.t_party,
+              amount: trans.t_amt,
+              c_name: trans.t_cat.c_name,
+              c_type: trans.t_cat.c_type,
+              date: trans.createdAt,
+              mode: trans.t_mode,
+              desc: trans.t_desc,
+              newBal: trans.t_new_bal
+            }
+          }));
         });
     }
   }, [uId]);
+
+  useEffect(() => {
+    console.log(transList)
+  }, [transList]);
 
   return (
     <>

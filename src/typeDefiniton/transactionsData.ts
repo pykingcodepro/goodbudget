@@ -3,7 +3,7 @@ type transactionsData = {
     party: string,
     amount: number,
     c_name: string,
-    c_type: string
+    c_type: string,
     date: string,
     mode: string,
     desc: string,

@@ -29,6 +29,7 @@ const TransactionSchema = new Schema({
     t_party: { type: String, require: true },
     t_amt: { type: Number, require: true },
     t_cat: { type: Schema.ObjectId, require: true, ref: "Category" },
+    t_mode: { type: String, require: true },
     t_new_bal: { type: Number, require: true },
     t_desc: String
 }, { timestamps: true });
