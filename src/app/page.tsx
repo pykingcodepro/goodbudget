@@ -35,7 +35,16 @@ export default function Home() {
         .then((res) => res.json())
         .then((data) => {
           console.log(data.transactions)
-          setTransList(data.transactions.map((trans) => {
+          setTransList(data.transactions.map((trans: {
+            _id: string;
+            t_party: string;
+            t_amt: number;
+            t_cat: { c_name: string; c_type: string };
+            createdAt: string;
+            t_mode: string;
+            t_desc?: string;
+            t_new_bal: number;
+          }) => {
             return {
               _id: trans._id,
               party: trans.t_party,
