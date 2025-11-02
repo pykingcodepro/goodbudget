@@ -2,9 +2,21 @@
 
 import NavBarComponent from "@/components/NavBar";
 import TransTableComponent from "@/components/tables/TransTableComponent";
+import { splitTimeStamp } from "@/lib/spiltTimeStamp";
 import transactionsData from "@/typeDefiniton/transactionsData";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+type transDataFromServer = {
+  _id: string;
+  t_party: string;
+  t_amt: number;
+  t_cat: { c_name: string; c_type: string };
+  createdAt: string;
+  t_mode: string;
+  t_desc?: string;
+  t_new_bal: number;
+};
 
 export default function Home() {
   const [transList, setTransList] = useState<transactionsData[] | null>(null);
@@ -34,35 +46,30 @@ export default function Home() {
       fetch(`api/transactions/${uId}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.transactions)
-          setTransList(data.transactions.map((trans: {
-            _id: string;
-            t_party: string;
-            t_amt: number;
-            t_cat: { c_name: string; c_type: string };
-            createdAt: string;
-            t_mode: string;
-            t_desc?: string;
-            t_new_bal: number;
-          }) => {
-            return {
-              _id: trans._id,
-              party: trans.t_party,
-              amount: trans.t_amt,
-              c_name: trans.t_cat.c_name,
-              c_type: trans.t_cat.c_type,
-              date: trans.createdAt,
-              mode: trans.t_mode,
-              desc: trans.t_desc,
-              newBal: trans.t_new_bal
-            }
-          }));
+          console.log(data.transactions);
+          setTransList(
+            data.transactions.map((trans: transDataFromServer) => {
+              const createdTimeStamp = splitTimeStamp(trans.createdAt);
+              const createdDate = createdTimeStamp.date + "/" + createdTimeStamp.month + "/" + createdTimeStamp.year;
+              return {
+                _id: trans._id,
+                party: trans.t_party,
+                amount: trans.t_amt,
+                c_name: trans.t_cat.c_name,
+                c_type: trans.t_cat.c_type,
+                date: createdDate,
+                mode: trans.t_mode.toUpperCase(),
+                desc: trans.t_desc,
+                newBal: trans.t_new_bal,
+              };
+            })
+          );
         });
     }
   }, [uId]);
 
   useEffect(() => {
-    console.log(transList)
+    console.log(transList);
   }, [transList]);
 
   return (
