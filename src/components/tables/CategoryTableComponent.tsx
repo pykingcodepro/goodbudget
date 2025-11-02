@@ -1,3 +1,4 @@
+import { splitTimeStamp } from "@/lib/spiltTimeStamp";
 import categoryData from "@/typeDefiniton/categoryData";
 
 export default function CategoryTableComponent({
@@ -6,6 +7,8 @@ export default function CategoryTableComponent({
   categoryList: categoryData[] | null;
 }) {
   const categoryListEl = categoryList?.map((cat: categoryData, key: number) => {
+    const createdTimeStamp = splitTimeStamp(cat.createdAt);
+    const createdDate = createdTimeStamp.date + "/" + createdTimeStamp.month + "/" + createdTimeStamp.year;
     return (
       <tr key={key}>
         <td>{cat.c_name}</td>
@@ -17,7 +20,7 @@ export default function CategoryTableComponent({
         >
           {cat.c_type}
         </td>
-        <td>{cat.createdAt}</td>
+        <td>{createdDate}</td>
       </tr>
     );
   });

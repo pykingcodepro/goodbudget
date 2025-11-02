@@ -2,10 +2,21 @@
 
 import LastDaysCharts from "@/components/charts/LastDaysCharts";
 import NavBarComponent from "@/components/NavBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { LastDaysChartData } from "@/typeDefiniton/LastDaysChartData";
 
 export default function Page() {
   const [noOfDays, setNoOfDays] = useState<number>(7);
+  const [dataList, setDataList] = useState<LastDaysChartData[]|null>(null);
+
+  useEffect(() => {
+    setDataList([
+      { date: "2025-09-05", bal: 200 },
+      { date: "2025-09-18", bal: 300 },
+      { date: "2025-09-21", bal: 400 },
+      { date: "2025-09-22", bal: 200 },
+    ]);
+  }, []);
 
   return (
     <>
@@ -32,7 +43,7 @@ export default function Page() {
                 </div>
                 <div className="card-body">
                   <div className="table-responsive-md">
-                    <LastDaysCharts noOfDays={noOfDays} />
+                    <LastDaysCharts noOfDays={noOfDays} dataList={dataList} />
                   </div>
                 </div>
               </div>

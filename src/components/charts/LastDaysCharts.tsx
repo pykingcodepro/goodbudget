@@ -1,4 +1,5 @@
 "use client";
+import { LastDaysChartData } from "@/typeDefiniton/LastDaysChartData";
 import React from "react";
 import {
   Area,
@@ -9,13 +10,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-
-const data = [
-  { date: "2025-09-05", bal: 200 },
-  { date: "2025-09-18", bal: 300 },
-  { date: "2025-09-21", bal: 400 },
-  { date: "2025-09-22", bal: 200 },
-];;
 
 
 interface dateBal {
@@ -138,14 +132,12 @@ function fillMissingDays(data: dateBal[], noOfDays: number): dateBal[] {
 const formatBal = (bal: number) => `Rs. ${bal}`;
 
 export default function LastDaysCharts(
-  { noOfDays } : { noOfDays: number }
+  { noOfDays, dataList } : { noOfDays: number, dataList: LastDaysChartData[]|null},
 ) {
-
-  console.log(fillMissingDays(data, 7));
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <AreaChart width={650} height={300} data={fillMissingDays(data, noOfDays)}>
+      <AreaChart width={650} height={300} data={fillMissingDays(dataList ? dataList : [], noOfDays)}>
         <defs>
           <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#1c8eff" />
