@@ -7,13 +7,18 @@ const MONGODB_NAME = process.env.MONGODB_NAME as string;
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: Promise<{ u_id: string }> }
+  {
+    params,
+  }: {
+    params: Promise<{ u_id: string }>
+  }
 ) => {
   try {
     await connectDB(MONGODB_URI, MONGODB_NAME);
     const { u_id } = await params;
-    const transactions = await Transaction.find({ u_id: u_id })
-    .populate('t_cat');
+    const { searchParams } = new URL(req.url);
+    console.log(searchParams.get('noOfDays'));
+    const transactions = (await Transaction.find({ u_id: u_id }).populate("t_cat")).reverse();
     return NextResponse.json({ transactions: transactions }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 });
@@ -27,7 +32,10 @@ export const POST = async (
   try {
     await connectDB(MONGODB_URI, MONGODB_NAME);
     const { u_id } = await params;
-    const { t_party, t_amt, c_id, t_mode, t_desc } = await req.json() as { t_party: string, t_amt: number, c_id: string, t_mode: string, t_desc: string }
+    const { t_party, t_amt, c_id, t_mode, t_desc } = await req.json();
+    
+    console.log(u_id);
+    console.log({ t_party, t_amt, c_id, t_mode, t_desc });
 
     //Check if user exist
     const user = await User.findById(u_id);
@@ -35,19 +43,27 @@ export const POST = async (
       return NextResponse.json({ msg: "User doesn't exist" }, { status: 404 });
 
     const category = await Category.findById(c_id);
-    
-    if(!category)
-      return NextResponse.json({ msg: "Category doesn't exist" }, { status: 404 });
-    
-    
-    if (t_party === "" || t_amt === 0 || c_id === "" || t_mode === "" || t_desc === "")
+
+    if (!category)
       return NextResponse.json(
-      { msg: "Fields are incomplete" },
-      { status: 500 }
-    );
+        { msg: "Category doesn't exist" },
+        { status: 404 }
+      );
+
+    if (
+      t_party === "" ||
+      t_amt === 0 ||
+      c_id === "" ||
+      t_mode === "" ||
+      t_desc === ""
+    )
+      return NextResponse.json(
+        { msg: "Fields are incomplete" },
+        { status: 500 }
+      );
 
     const sign = category.c_type === "income" ? +1 : -1;
-    const t_new_bal = user.u_bal + sign*t_amt;
+    const t_new_bal = user.u_bal + sign * t_amt;
 
     const newTrans = await Transaction.insertOne({
       u_id: u_id,
@@ -56,11 +72,14 @@ export const POST = async (
       t_cat: c_id,
       t_mode: t_mode,
       t_new_bal: t_new_bal,
-      t_desc: t_desc
+      t_desc: t_desc,
     });
 
-    if(!newTrans)
-      return NextResponse.json({ msg: "Internal Server Error" }, { status: 500 });
+    if (!newTrans)
+      return NextResponse.json(
+        { msg: "Internal Server Error" },
+        { status: 500 }
+      );
 
     await User.findByIdAndUpdate(u_id, { u_bal: t_new_bal });
 

@@ -10,12 +10,13 @@ export default function AddTransaction() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [party, setParty] = useState<string>("");
   const [amt, setAmt] = useState<number>(0);
-  const [cId, setCId] = useState<string>("");
+  const [cId, setCId] = useState<string>("0");
   const [mode, setMode] = useState<string>("cash");
   const [desc, setDesc] = useState<string>("");
   const router = useRouter();
 
   const submitHandler = async() => {
+    setIsLoading(true);
     const res = await fetch(`../api/transactions/${uId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -29,7 +30,7 @@ export default function AddTransaction() {
       setIsLoading(false);
       return;
     }
-
+    setIsLoading(false);
     setMsg("");
     router.push("/");
 
@@ -107,6 +108,7 @@ export default function AddTransaction() {
                 onChange={e => setCId(e.target.value)}
                 required={true}
               >
+                <option value="0">Select Category</option>
                 {catList?.map((cat: categoryData, key) => {
                   return (
                     <option key={key} value={cat._id}>

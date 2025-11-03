@@ -7,6 +7,12 @@ import transactionsData from "@/typeDefiniton/transactionsData";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+type userData = {
+  u_name: string,
+  u_email: string,
+  u_bal: number
+};
+
 type transDataFromServer = {
   _id: string;
   t_party: string;
@@ -21,6 +27,7 @@ type transDataFromServer = {
 export default function Home() {
   const [transList, setTransList] = useState<transactionsData[] | null>(null);
   const [uId, setUId] = useState<string | null>(null);
+  const [userData, setUserData] = useState<userData|null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -43,6 +50,17 @@ export default function Home() {
   useEffect(() => {
     // console.log(uId);
     if (uId != null) {
+
+      fetch(`api/userData/${uId}`)
+      .then(res => res.json())
+      .then(data => {
+        setUserData({ 
+          u_name: data.u_name,
+          u_email: data.u_email,
+          u_bal: data.u_bal
+         });
+      })
+      
       fetch(`api/transactions/${uId}`)
         .then((res) => res.json())
         .then((data) => {
@@ -79,6 +97,7 @@ export default function Home() {
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-12 col-md-10 col-lg-8">
+              <h2 className="mb-5">Balance: Rs.{ userData ? userData.u_bal : "-" }</h2>
               <div className="card">
                 <div className="card-header">Last Transactions</div>
                 <div className="card-body">

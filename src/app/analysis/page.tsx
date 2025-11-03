@@ -6,17 +6,34 @@ import { useEffect, useState } from "react";
 import { LastDaysChartData } from "@/typeDefiniton/LastDaysChartData";
 
 export default function Page() {
+  const [uId, setUId] = useState<string | null>(null);
   const [noOfDays, setNoOfDays] = useState<number>(7);
-  const [dataList, setDataList] = useState<LastDaysChartData[]|null>(null);
+  const [dataList, setDataList] = useState<LastDaysChartData[] | null>(null);
 
   useEffect(() => {
-    setDataList([
-      { date: "2025-09-05", bal: 200 },
-      { date: "2025-09-18", bal: 300 },
-      { date: "2025-09-21", bal: 400 },
-      { date: "2025-09-22", bal: 200 },
-    ]);
+    fetch("api/me/", {
+      method: "GET",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUId(data.u_id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
+
+  useEffect(() => {
+    if (uId != null) {
+      fetch(`api/transactions/${uId}?noOfDays=${7}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        });
+    }
+  }, [uId]);
 
   return (
     <>
