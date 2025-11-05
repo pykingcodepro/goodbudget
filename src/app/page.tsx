@@ -3,6 +3,7 @@
 import NavBarComponent from "@/components/NavBar";
 import TransTableComponent from "@/components/tables/TransTableComponent";
 import { splitTimeStamp } from "@/lib/spiltTimeStamp";
+import categoryData from "@/typeDefiniton/categoryData";
 import transactionsData from "@/typeDefiniton/transactionsData";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,7 +18,7 @@ type transDataFromServer = {
   _id: string;
   t_party: string;
   t_amt: number;
-  t_cat: { c_name: string; c_type: string };
+  t_cat: { c_name: string; c_type: string; _id: string };
   createdAt: string;
   t_mode: string;
   t_desc?: string;
@@ -26,6 +27,7 @@ type transDataFromServer = {
 
 export default function Home() {
   const [transList, setTransList] = useState<transactionsData[] | null>(null);
+  const [catList, setCatList] = useState<categoryData[]|null>(null);
   const [uId, setUId] = useState<string | null>(null);
   const [userData, setUserData] = useState<userData|null>(null);
   const router = useRouter();
@@ -73,6 +75,7 @@ export default function Home() {
                 _id: trans._id,
                 party: trans.t_party,
                 amount: trans.t_amt,
+                c_id: trans.t_cat._id,
                 c_name: trans.t_cat.c_name,
                 c_type: trans.t_cat.c_type,
                 date: createdDate,
@@ -83,6 +86,13 @@ export default function Home() {
             })
           );
         });
+
+        fetch(`api/categories/${uId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setCatList(data.categories);
+        });
+
     }
   }, [uId]);
 
@@ -98,11 +108,11 @@ export default function Home() {
           <div className="row justify-content-center">
             <div className="col-12 col-md-10 col-lg-8">
               <h2 className="mb-5">Balance: Rs.{ userData ? userData.u_bal : "-" }</h2>
-              <div className="card">
+              <div className="card overflow-x-scroll">
                 <div className="card-header">Last Transactions</div>
                 <div className="card-body">
                   <div className="table-responsive-md">
-                    <TransTableComponent transactionsList={transList} />
+                    <TransTableComponent transactionsList={transList} catList={catList} />
                   </div>
                 </div>
               </div>
