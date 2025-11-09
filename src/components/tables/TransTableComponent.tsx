@@ -6,10 +6,12 @@ import { useState } from "react";
 
 export default function TransTableComponent({
   transactionsList,
-  catList
+  catList,
+  handleEdit
 }: {
   transactionsList: transactionsData[] | null,
-  catList: categoryData[]|null
+  catList: categoryData[]|null,
+  handleEdit: (editTransId: string, tParty: string, tMode: string, tCat: string, tDesc: string) => Promise<void>; 
 }) {
   const [editTransId, setEditTransId] = useState<string | null>(null);
   const [tParty, setTParty] = useState<string>("");
@@ -17,9 +19,7 @@ export default function TransTableComponent({
   const [tMode, setTMode] = useState<string>("");
   const [tCat, setTCat] = useState<string>("");
 
-  const handleEdit = async (id: string) => {
-    setEditTransId(id);
-  };
+  
 
   const transListElement = transactionsList?.map(
     (trans: transactionsData, key: number) => {
@@ -48,7 +48,7 @@ export default function TransTableComponent({
               <button
                 className="btn btn-warning"
                 onClick={(e) => {
-                  handleEdit(trans._id);
+                  setEditTransId(trans._id);
                   setTParty(trans.party);
                   setTMode(trans.mode);
                   setTCat(trans.c_id);
@@ -93,7 +93,7 @@ export default function TransTableComponent({
             <td>{trans.date}</td>
             <td>
               <select
-                onChange={e => setTMode(e.target.value)}
+                onChange={e => setTMode(e.target.value.toLowerCase())}
                 value={tMode}
               >
                 <option value="cash">CASH</option>
@@ -105,7 +105,10 @@ export default function TransTableComponent({
               <textarea onChange={e => setTDesc(e.target.value)} value={tDesc}></textarea>
             </td>
             <td>
-              <button className="btn btn-primary">Update</button>
+              <button className="btn btn-primary" onClick={e => {
+                handleEdit(editTransId, tParty, tMode, tCat, tDesc)
+                setEditTransId(null);
+              }}>Update</button>
             </td>
           </tr>
         );

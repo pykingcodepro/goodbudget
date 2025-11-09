@@ -42,6 +42,29 @@ export default function Page() {
     }
   }, [uId]);
 
+  const handleEdit = async(editCatId: number, cName: string) => {
+    const res = await fetch('api/categories', {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ c_id: editCatId, c_name: cName })
+    });
+    const data = await res.json();
+    if(!res.ok) {
+      console.log(data.error);
+      return;
+    }
+    setCategoryList(categoryList ? categoryList.map((cat:categoryData) => {
+      if (cat._id === editCatId) {
+        return {
+          ...cat,
+          c_name: cName
+        };
+      } else {
+        return cat;
+      }
+    }): []);
+  }
+
   return (
     <>
       <NavBarComponent />
@@ -53,7 +76,7 @@ export default function Page() {
                 <div className="card-header">Categories</div>
                 <div className="card-body">
                   <div className="table-responsive-md">
-                    <CategoryTableComponent categoryList={categoryList} />
+                    <CategoryTableComponent categoryList={categoryList} handleEdit = {handleEdit} />
                   </div>
                 </div>
               </div>

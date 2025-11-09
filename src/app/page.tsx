@@ -9,9 +9,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type userData = {
-  u_name: string,
-  u_email: string,
-  u_bal: number
+  u_name: string;
+  u_email: string;
+  u_bal: number;
 };
 
 type transDataFromServer = {
@@ -27,9 +27,9 @@ type transDataFromServer = {
 
 export default function Home() {
   const [transList, setTransList] = useState<transactionsData[] | null>(null);
-  const [catList, setCatList] = useState<categoryData[]|null>(null);
+  const [catList, setCatList] = useState<categoryData[] | null>(null);
   const [uId, setUId] = useState<string | null>(null);
-  const [userData, setUserData] = useState<userData|null>(null);
+  const [userData, setUserData] = useState<userData | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -52,17 +52,16 @@ export default function Home() {
   useEffect(() => {
     // console.log(uId);
     if (uId != null) {
-
       fetch(`api/userData/${uId}`)
-      .then(res => res.json())
-      .then(data => {
-        setUserData({ 
-          u_name: data.u_name,
-          u_email: data.u_email,
-          u_bal: data.u_bal
-         });
-      })
-      
+        .then((res) => res.json())
+        .then((data) => {
+          setUserData({
+            u_name: data.u_name,
+            u_email: data.u_email,
+            u_bal: data.u_bal,
+          });
+        });
+
       fetch(`api/transactions/${uId}`)
         .then((res) => res.json())
         .then((data) => {
@@ -70,7 +69,12 @@ export default function Home() {
           setTransList(
             data.transactions.map((trans: transDataFromServer) => {
               const createdTimeStamp = splitTimeStamp(trans.createdAt);
-              const createdDate = createdTimeStamp.date + "/" + createdTimeStamp.month + "/" + createdTimeStamp.year;
+              const createdDate =
+                createdTimeStamp.date +
+                "/" +
+                createdTimeStamp.month +
+                "/" +
+                createdTimeStamp.year;
               return {
                 _id: trans._id,
                 party: trans.t_party,
@@ -87,18 +91,69 @@ export default function Home() {
           );
         });
 
-        fetch(`api/categories/${uId}`)
+      fetch(`api/categories/${uId}`)
         .then((res) => res.json())
         .then((data) => {
           setCatList(data.categories);
         });
-
     }
   }, [uId]);
+
+  const handleEdit = async (
+    editTransId: string,
+    tParty: string,
+    tMode: string,
+    tCat: string,
+    tDesc: string
+  ) => {
+    try {
+      console.log(editTransId, tParty, tMode, tCat, tDesc);
+      const res = await fetch(`api/transactions/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          t_id: editTransId,
+          t_party: tParty,
+          t_mode: tMode,
+          c_id: tCat,
+          t_desc: tDesc,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("Failed to update transaction:", data?.message || data);
+        return;
+      }
+
+      // Assuming `data` contains the updated transaction object
+      if (transList) {
+        setTransList(transList.map((trans) => {
+          if (trans._id === editTransId) {
+            // Replace with updated values
+            return {
+              ...trans,
+              party: tParty,
+              mode: tMode,
+              c_id: tCat,
+              desc: tDesc,
+            };
+          }
+          return trans;
+        }));
+      }
+    } catch (err) {
+      console.error("Error while editing transaction:", err);
+    }
+  };
 
   useEffect(() => {
     console.log(transList);
   }, [transList]);
+
 
   return (
     <>
@@ -107,12 +162,18 @@ export default function Home() {
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-12 col-md-10 col-lg-8">
-              <h2 className="mb-5">Balance: Rs.{ userData ? userData.u_bal : "-" }</h2>
+              <h2 className="mb-5">
+                Balance: Rs.{userData ? userData.u_bal : "-"}
+              </h2>
               <div className="card overflow-x-scroll">
                 <div className="card-header">Last Transactions</div>
                 <div className="card-body">
                   <div className="table-responsive-md">
-                    <TransTableComponent transactionsList={transList} catList={catList} />
+                    <TransTableComponent
+                      transactionsList={transList}
+                      catList={catList}
+                      handleEdit={handleEdit}
+                    />
                   </div>
                 </div>
               </div>
