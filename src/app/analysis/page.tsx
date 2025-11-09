@@ -27,13 +27,20 @@ export default function Page() {
 
   useEffect(() => {
     if (uId != null) {
-      fetch(`api/transactions/${uId}?noOfDays=${7}`)
+      fetch(`api/transactions/${uId}?noOfDays=${noOfDays}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          const chartData: LastDaysChartData[] = data.transactions.map((t: any) => ({
+            date: t.createdAt.split('T')[0],
+            bal: t.t_new_bal
+          }));
+          setDataList(chartData);
+        })
+        .catch(() => {
+          setDataList([]);
         });
     }
-  }, [uId]);
+  }, [uId, noOfDays]);
 
   return (
     <>

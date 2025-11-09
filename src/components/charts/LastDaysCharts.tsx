@@ -1,6 +1,6 @@
 "use client";
 import { LastDaysChartData } from "@/typeDefiniton/LastDaysChartData";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -55,7 +55,6 @@ const sliceDate = (date: string) => {
 
 const formatDate = (date: string) => {
   const dateObj = sliceDate(date);
-  // console.log({ date: date, dateObj: dateObj });
   if (dateObj != -1) {
     const { year, month, day } = dateObj as {
       year: number;
@@ -134,10 +133,11 @@ const formatBal = (bal: number) => `Rs. ${bal}`;
 export default function LastDaysCharts(
   { noOfDays, dataList } : { noOfDays: number, dataList: LastDaysChartData[]|null},
 ) {
+  const filledData = fillMissingDays(dataList || [], noOfDays);
 
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <AreaChart width={650} height={300} data={fillMissingDays(dataList ? dataList : [], noOfDays)}>
+      <AreaChart width={650} height={300} data={filledData}>
         <defs>
           <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#1c8eff" />
