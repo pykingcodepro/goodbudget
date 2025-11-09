@@ -104,7 +104,10 @@ export default function Page() {
               lineHeight: "-5",
               paddingBottom: "0.3rem",
             }}
-            onClick={() => router.push("/addCategory")}
+            onClick={e => {
+              e.preventDefault();
+              router.push("/addCategory");
+            }}
           >
             +
           </button>

@@ -84,13 +84,25 @@ export default function AddCategory() {
                 <option value="income">Income</option>
               </select>
             </div>
-            <button
-              type="submit"
-              className={"btn btn-primary " + (isLoading ? "disabled" : "")}
-              onClick={handleClick}
-            >
-              Add
-            </button>
+            <div className="row d-flex justify-content-between">
+              <button
+                type="submit"
+                className={"col-sm-3 btn btn-primary " + (isLoading ? "disabled" : "")}
+                onClick={handleClick}
+              >
+                Add
+              </button>
+              <button
+                type="button"
+                className="col-sm-3 btn btn-danger"
+                onClick={e => {
+                  e.preventDefault();
+                  router.push("/categories");
+                }}
+              >
+                Back
+              </button>
+            </div>
             <br />
             <small className="text-danger">{msg}</small>
           </form>

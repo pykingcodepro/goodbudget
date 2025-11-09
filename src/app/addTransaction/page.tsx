@@ -15,13 +15,19 @@ export default function AddTransaction() {
   const [desc, setDesc] = useState<string>("");
   const router = useRouter();
 
-  const submitHandler = async() => {
+  const submitHandler = async () => {
     setIsLoading(true);
     const res = await fetch(`../api/transactions/${uId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ t_party: party, t_amt: amt, c_id: cId, t_mode: mode, t_desc: desc })
+      body: JSON.stringify({
+        t_party: party,
+        t_amt: amt,
+        c_id: cId,
+        t_mode: mode,
+        t_desc: desc,
+      }),
     });
 
     const data = await res.json();
@@ -33,7 +39,6 @@ export default function AddTransaction() {
     setIsLoading(false);
     setMsg("");
     router.push("/");
-
   };
 
   useEffect(() => {
@@ -81,7 +86,7 @@ export default function AddTransaction() {
                 id="partyName"
                 placeholder="Party"
                 value={party}
-                onChange={e => setParty(e.target.value)}
+                onChange={(e) => setParty(e.target.value)}
                 required={true}
               />
             </div>
@@ -93,7 +98,7 @@ export default function AddTransaction() {
                 id="amountInput"
                 placeholder="Amount"
                 value={amt}
-                onChange={e => setAmt(parseInt(e.target.value))}
+                onChange={(e) => setAmt(parseInt(e.target.value))}
                 required={true}
               />
             </div>
@@ -105,7 +110,7 @@ export default function AddTransaction() {
                 id=""
                 className="form-select"
                 value={cId}
-                onChange={e => setCId(e.target.value)}
+                onChange={(e) => setCId(e.target.value)}
                 required={true}
               >
                 <option value="0">Select Category</option>
@@ -126,7 +131,7 @@ export default function AddTransaction() {
                 className="form-select"
                 id=""
                 value={mode}
-                onChange={e => setMode(e.target.value)}
+                onChange={(e) => setMode(e.target.value)}
                 required={true}
               >
                 <option value="cash">Cash</option>
@@ -143,18 +148,26 @@ export default function AddTransaction() {
                 className="form-control"
                 required={true}
                 value={desc}
-                onChange={e => setDesc(e.target.value)}
+                onChange={(e) => setDesc(e.target.value)}
               ></textarea>
             </div>
 
-            <button
-              type="submit"
-              className="btn btn-primary my-3"
-              onClick={submitHandler}
-              disabled={isLoading}
-            >
-              Submit
-            </button>
+            <div className="row d-flex justify-content-between mx-2">
+              <button
+                type="submit"
+                className="col-sm-3 btn btn-primary mt-3"
+                onClick={submitHandler}
+                disabled={isLoading}
+              >
+                Add
+              </button>
+              <button 
+                className="col-sm-3 btn btn-danger mt-3"
+                onClick={e => router.push("/")}
+              >
+                Back
+              </button>
+            </div>
             <br />
             <small className="text-danger">{msg}</small>
           </form>
