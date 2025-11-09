@@ -30,14 +30,17 @@ export default function Page() {
       fetch(`api/transactions/${uId}?noOfDays=${noOfDays}`)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
+          // Transform the transactions data into the LastDaysChartData format
           const chartData: LastDaysChartData[] = data.transactions.map((t: any) => ({
-            date: t.createdAt.split('T')[0],
+            date: t.createdAt.split('T')[0], // Assuming createdAt is in ISO format
             bal: t.t_new_bal
           }));
           setDataList(chartData);
         })
-        .catch(() => {
-          setDataList([]);
+        .catch(error => {
+          console.error("Error fetching transactions:", error);
+          setDataList([]); // Set empty array instead of null on error
         });
     }
   }, [uId, noOfDays]);

@@ -55,6 +55,7 @@ const sliceDate = (date: string) => {
 
 const formatDate = (date: string) => {
   const dateObj = sliceDate(date);
+  // console.log({ date: date, dateObj: dateObj });
   if (dateObj != -1) {
     const { year, month, day } = dateObj as {
       year: number;
@@ -133,7 +134,12 @@ const formatBal = (bal: number) => `Rs. ${bal}`;
 export default function LastDaysCharts(
   { noOfDays, dataList } : { noOfDays: number, dataList: LastDaysChartData[]|null},
 ) {
+  console.log("Input dataList:", dataList);
+  console.log("Number of days:", noOfDays);
+
+  // Since the data is already in the correct format, just pass it directly
   const filledData = fillMissingDays(dataList || [], noOfDays);
+  console.log("After fillMissingDays:", filledData);
 
   return (
     <ResponsiveContainer width="100%" height={300}>
