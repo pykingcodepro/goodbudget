@@ -2,7 +2,7 @@ import { getCookies } from "@/lib/getCookies";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
-export const GET = async(req: NextRequest) => {
+export const GET = async(_req: NextRequest) => {
     try {
         const token = await getCookies("token");
         if (!token) return NextResponse.json({ msg: "Invalid Credentials" }, { status: 403 });

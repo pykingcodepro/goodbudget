@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 const MONGODB_URI = process.env.MONGODB_URI as string;
 const MONGODB_NAME = process.env.MONGODB_NAME as string;
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (_req: NextRequest) => {
   try {
     connectDB(MONGODB_URI, MONGODB_NAME);
     return NextResponse.json({ msg: "Successful" }, { status: 200 });

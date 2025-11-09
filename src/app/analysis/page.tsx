@@ -32,8 +32,12 @@ export default function Page() {
         .then((data) => {
           console.log(data);
           // Transform the transactions data into the LastDaysChartData format
-          const chartData: LastDaysChartData[] = data.transactions.map((t: any) => ({
-            date: t.createdAt.split('T')[0], // Assuming createdAt is in ISO format
+          interface Transaction {
+            createdAt: string;
+            t_new_bal: number;
+          }
+          const chartData: LastDaysChartData[] = data.transactions.map((t: Transaction) => ({
+            date: t.createdAt.split('T')[0],
             bal: t.t_new_bal
           }));
           setDataList(chartData);
