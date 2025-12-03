@@ -17,8 +17,20 @@ export const GET = async (
     await connectDB(MONGODB_URI, MONGODB_NAME);
     const { u_id } = await params;
     const { searchParams } = new URL(req.url);
-    console.log(searchParams.get('noOfDays'));
-    const transactions = (await Transaction.find({ u_id: u_id }).populate("t_cat")).reverse();
+    const noOfDaysParam: string | null = searchParams.get("noOfDays");
+    const noOfDays: number = parseInt(noOfDaysParam ? noOfDaysParam : "0");
+
+    console.log(typeof noOfDays, noOfDays);
+    let startDate: Date = new Date();
+    startDate.setDate(startDate.getDate() - noOfDays);
+    console.log(startDate);
+    const transactions = (
+      await Transaction.find({
+        u_id: u_id,
+        createdAt: { $gte: startDate },
+      }).populate("t_cat")
+    );
+    console.log(transactions);
     return NextResponse.json({ transactions: transactions }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 });
@@ -33,7 +45,7 @@ export const POST = async (
     await connectDB(MONGODB_URI, MONGODB_NAME);
     const { u_id } = await params;
     const { t_party, t_amt, c_id, t_mode, t_desc } = await req.json();
-    
+
     console.log(u_id);
     console.log({ t_party, t_amt, c_id, t_mode, t_desc });
 

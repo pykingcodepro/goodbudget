@@ -1,4 +1,4 @@
 export type LastDaysChartData = {
   date: string,
-  bal: number
+  t_amt: number
 }

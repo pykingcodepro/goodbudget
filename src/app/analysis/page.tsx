@@ -1,13 +1,15 @@
 "use client";
 
-import LastDaysCharts from "@/components/charts/LastDaysCharts";
 import NavBarComponent from "@/components/NavBar";
 import { useEffect, useState } from "react";
 import { LastDaysChartData } from "@/typeDefiniton/LastDaysChartData";
+import LastDaysCharts from "@/components/charts/LastDaysCharts";
+import CategoryPieCharts from "@/components/charts/CategoryPieCharts";
 
 export default function Page() {
   const [uId, setUId] = useState<string | null>(null);
-  const [noOfDays, setNoOfDays] = useState<number>(7);
+  const [noOfDays1, setNoOfDays1] = useState<number>(7);
+  const [noOfDays2, setNoOfDays2] = useState<number>(7);
   const [dataList, setDataList] = useState<LastDaysChartData[] | null>(null);
 
   useEffect(() => {
@@ -27,18 +29,18 @@ export default function Page() {
 
   useEffect(() => {
     if (uId != null) {
-      fetch(`api/transactions/${uId}?noOfDays=${noOfDays}`)
+      fetch(`api/transactions/${uId}?noOfDays=${noOfDays1}`)
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
           // Transform the transactions data into the LastDaysChartData format
           interface Transaction {
             createdAt: string;
-            t_new_bal: number;
+            t_amt: number;
           }
           const chartData: LastDaysChartData[] = data.transactions.map((t: Transaction) => ({
             date: t.createdAt.split('T')[0],
-            bal: t.t_new_bal
+            t_amt: t.t_amt
           }));
           setDataList(chartData);
         })
@@ -47,7 +49,20 @@ export default function Page() {
           setDataList([]); // Set empty array instead of null on error
         });
     }
-  }, [uId, noOfDays]);
+  }, [uId, noOfDays1]);
+
+  // API Call for category data
+  useEffect(() => {
+    if (uId != null) {
+      fetch(`api/categories/${uId}/?noOfDays=${noOfDays2}`)
+      .then(res => res.json())
+      .then(data => console.log(data))
+      .catch(err => {
+        console.log("Error: ");
+        console.log(err);
+      })
+    }
+  }, [uId, noOfDays2]);
 
   return (
     <>
@@ -55,16 +70,16 @@ export default function Page() {
       <div className="main-container d-flex justify-content-center">
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-12 col-md-10 col-lg-8">
+            <div className="col-12 col-md-10 col-lg-6">
               <div className="card">
                 <div className="card-header d-flex justify-content-between">
                   <span>Last Transactions</span>
                   <select
                     name=""
                     id=""
-                    value={noOfDays}
+                    value={noOfDays1}
                     onChange={(e) => {
-                      setNoOfDays(parseInt(e.target.value));
+                      setNoOfDays1(parseInt(e.target.value));
                     }}
                   >
                     <option value={7}>Last 7 Days</option>
@@ -74,7 +89,31 @@ export default function Page() {
                 </div>
                 <div className="card-body">
                   <div className="table-responsive-md">
-                    <LastDaysCharts noOfDays={noOfDays} dataList={dataList} />
+                    <LastDaysCharts noOfDays1={noOfDays1} dataList={dataList} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-md-10 col-lg-6">
+              <div className="card">
+                <div className="card-header d-flex justify-content-between">
+                  <span>Last Transactions</span>
+                  <select
+                    name=""
+                    id=""
+                    value={noOfDays2}
+                    onChange={(e) => {
+                      setNoOfDays2(parseInt(e.target.value));
+                    }}
+                  >
+                    <option value={7}>Last 7 Days</option>
+                    <option value={30}>Last 30 Days</option>
+                    <option value={365}>Last 365 Days</option>
+                  </select>
+                </div>
+                <div className="card-body">
+                  <div className="table-responsive-md">
+                    <CategoryPieCharts />
                   </div>
                 </div>
               </div>
