@@ -22,7 +22,7 @@ export const GET = async (
 
     console.log(typeof noOfDays, noOfDays);
     // eslint-disable-next-line prefer-const
-    let startDate: Date = new Date();
+    const startDate: Date = new Date();
     startDate.setDate(startDate.getDate() - noOfDays);
     console.log(startDate);
     const transactions = (
