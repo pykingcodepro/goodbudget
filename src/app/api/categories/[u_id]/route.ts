@@ -19,7 +19,7 @@ export const GET = async (
         return NextResponse.json({ categories: categories }, { status: 200 });
     }
     const noOfDays: number = parseInt(noOfDaysParam);
-    let startDate: Date = new Date();
+    const startDate: Date = new Date();
     startDate.setDate(startDate.getDate() - noOfDays);
 
     const categories = await Category.find({
