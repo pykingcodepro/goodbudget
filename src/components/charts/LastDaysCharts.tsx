@@ -28,7 +28,7 @@ export default function LastDaysCharts({
     console.log("Data from server: ");
     console.log(dataList);
     let ptr = 0;
-    const filledDataList: LastDaysChartData[] = [];
+    let filledDataList: LastDaysChartData[] = [];
     for (let i = 0; i <= noOfDays1; i++) {
       const curr_date_substring = curr_date.toISOString().substring(0, 10);
       console.log(curr_date_substring + " " + dataList[ptr]?.date);

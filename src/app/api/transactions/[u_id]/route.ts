@@ -21,6 +21,7 @@ export const GET = async (
     const noOfDays: number = parseInt(noOfDaysParam ? noOfDaysParam : "0");
 
     console.log(typeof noOfDays, noOfDays);
+    // eslint-disable-next-line prefer-const
     let startDate: Date = new Date();
     startDate.setDate(startDate.getDate() - noOfDays);
     console.log(startDate);
