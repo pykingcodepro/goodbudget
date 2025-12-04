@@ -1,4 +1,4 @@
-import { CategoryChartData } from "@/typeDefiniton/categoryChartData";
+import { CategoryChartData } from "@/typeDefiniton/CategoryChartData";
 import React, { useEffect } from "react";
 import { PieChart, Pie, Tooltip, Sector, PieSectorDataItem } from "recharts";
 

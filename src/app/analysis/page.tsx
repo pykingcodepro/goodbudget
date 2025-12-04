@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { LastDaysChartData } from "@/typeDefiniton/LastDaysChartData";
 import LastDaysCharts from "@/components/charts/LastDaysCharts";
 import CategoryPieCharts from "@/components/charts/CategoryPieCharts";
-import { CategoryChartData } from "@/typeDefiniton/categoryChartData";
+import { CategoryChartData } from "@/typeDefiniton/CategoryChartData";
 
 export default function Page() {
   const [uId, setUId] = useState<string | null>(null);
