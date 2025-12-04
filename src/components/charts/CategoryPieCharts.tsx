@@ -1,4 +1,5 @@
-import React from "react";
+import { CategoryChartData } from "@/typeDefiniton/categoryChartData";
+import React, { useEffect } from "react";
 import { PieChart, Pie, Tooltip, Sector, PieSectorDataItem } from "recharts";
 
 const data = [
@@ -80,7 +81,10 @@ const renderActiveShape = ({
   );
 };
 
-export default function CategoryPieCharts() {
+export default function CategoryPieCharts(
+  { dataList } : { dataList: CategoryChartData[]|null }
+) {
+
   return (
     <>
       <PieChart
@@ -88,7 +92,7 @@ export default function CategoryPieCharts() {
           width: "100%",
           maxWidth: "700px",
           maxHeight: "70vh",
-          aspectRatio: 1.618,
+          aspectRatio: 1.4,
         }}
         responsive
         margin={{
@@ -100,13 +104,13 @@ export default function CategoryPieCharts() {
       >
         <Pie
           activeShape={renderActiveShape}
-          data={data}
+          data={dataList ?? []}
           cx="50%"
           cy="50%"
           innerRadius="60%"
           outerRadius="80%"
           fill="#8884d8"
-          dataKey="value"
+          dataKey="totalAmount"
           isAnimationActive={true}
         />
         <Tooltip content={() => null} /> {/* defaultIndex={defaultIndex} */}

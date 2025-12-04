@@ -34,9 +34,6 @@ export default function LastDaysCharts({
       console.log(curr_date_substring + " " + dataList[ptr]?.date);
       let item = dataList[ptr];
       if (item && curr_date_substring === item.date) {
-        // filledDataList.push(item);
-        // ptr++;
-        // continue;
         const temp = { date: item.date, t_amt: 0 };
         while (item && curr_date_substring === item.date) {
           temp.t_amt += item.t_amt;
@@ -68,7 +65,7 @@ export default function LastDaysCharts({
           width: "100%",
           maxWidth: "700px",
           maxHeight: "70vh",
-          aspectRatio: 1.618,
+          aspectRatio: 1.4,
         }}
         responsive
         data={filledDataList ? filledDataList : []}

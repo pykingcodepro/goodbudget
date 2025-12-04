@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 import { LastDaysChartData } from "@/typeDefiniton/LastDaysChartData";
 import LastDaysCharts from "@/components/charts/LastDaysCharts";
 import CategoryPieCharts from "@/components/charts/CategoryPieCharts";
+import { CategoryChartData } from "@/typeDefiniton/categoryChartData";
 
 export default function Page() {
   const [uId, setUId] = useState<string | null>(null);
   const [noOfDays1, setNoOfDays1] = useState<number>(7);
   const [noOfDays2, setNoOfDays2] = useState<number>(7);
-  const [dataList, setDataList] = useState<LastDaysChartData[] | null>(null);
+  const [transDataList, setTransDataList] = useState<LastDaysChartData[] | null>(null);
+  const [categoryDataList, setCategoryDataList] = useState<CategoryChartData[]|null>(null);
 
   useEffect(() => {
     fetch("api/me/", {
@@ -42,11 +44,11 @@ export default function Page() {
             date: t.createdAt.split('T')[0],
             t_amt: t.t_amt
           }));
-          setDataList(chartData);
+          setTransDataList(chartData);
         })
         .catch(error => {
           console.error("Error fetching transactions:", error);
-          setDataList([]); // Set empty array instead of null on error
+          setTransDataList([]); // Set empty array instead of null on error
         });
     }
   }, [uId, noOfDays1]);
@@ -54,13 +56,10 @@ export default function Page() {
   // API Call for category data
   useEffect(() => {
     if (uId != null) {
-      fetch(`api/categories/${uId}/?noOfDays=${noOfDays2}`)
+      fetch(`api/transactions/groupBy/${uId}/`)
       .then(res => res.json())
-      .then(data => console.log(data))
-      .catch(err => {
-        console.log("Error: ");
-        console.log(err);
-      })
+      .then(data => setCategoryDataList(data.result))
+      .catch(err => console.log(err));
     }
   }, [uId, noOfDays2]);
 
@@ -89,7 +88,7 @@ export default function Page() {
                 </div>
                 <div className="card-body">
                   <div className="table-responsive-md">
-                    <LastDaysCharts noOfDays1={noOfDays1} dataList={dataList} />
+                    <LastDaysCharts noOfDays1={noOfDays1} dataList={transDataList} />
                   </div>
                 </div>
               </div>
@@ -113,7 +112,7 @@ export default function Page() {
                 </div>
                 <div className="card-body">
                   <div className="table-responsive-md">
-                    <CategoryPieCharts />
+                    <CategoryPieCharts dataList={categoryDataList} />
                   </div>
                 </div>
               </div>

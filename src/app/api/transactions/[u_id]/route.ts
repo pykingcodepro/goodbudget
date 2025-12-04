@@ -18,10 +18,15 @@ export const GET = async (
     const { u_id } = await params;
     const { searchParams } = new URL(req.url);
     const noOfDaysParam: string | null = searchParams.get("noOfDays");
-    const noOfDays: number = parseInt(noOfDaysParam ? noOfDaysParam : "0");
 
-    console.log(typeof noOfDays, noOfDays);
-    // eslint-disable-next-line prefer-const
+    // if noOfDaysParam is null
+    if(!noOfDaysParam) {
+      const transactions = await Transaction.find({ u_id: u_id }).populate("t_cat");
+      return NextResponse.json({ transactions: transactions }, { status: 200 });
+    }
+
+    const noOfDays: number = parseInt(noOfDaysParam);
+
     const startDate: Date = new Date();
     startDate.setDate(startDate.getDate() - noOfDays);
     console.log(startDate);
@@ -31,7 +36,6 @@ export const GET = async (
         createdAt: { $gte: startDate },
       }).populate("t_cat")
     );
-    console.log(transactions);
     return NextResponse.json({ transactions: transactions }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 });
